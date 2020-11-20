@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from "antd";
 import { useDataContext } from "../context/DataContext";
-import { patchOne, deleteOne } from "../apiclient";
+import { patchOne, deleteOne, createOne } from "../apiclient";
+import FormAddKey from "./FormAddKey";
+import { dateFormat } from "../utils/helpers";
+import {
+  CloseOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  SaveOutlined,
+} from "@ant-design/icons";
+
+import { green } from "@ant-design/colors";
 
 const EditableCell = ({
   editing,
@@ -13,24 +23,38 @@ const EditableCell = ({
   children,
   ...restProps
 }) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
   return (
     <td {...restProps}>
       {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
+        dataIndex !== "date" ? (
+          <Form.Item
+            name={dataIndex}
+            style={{
+              margin: 0,
+            }}
+          >
+            <InputNumber
+              min={0}
+              style={{
+                width: "100%",
+              }}
+            />
+          </Form.Item>
+        ) : (
+          <Form.Item
+            name={dataIndex}
+            style={{
+              margin: 0,
+            }}
+            type="date"
+          >
+            <Input
+              style={{
+                width: "100%",
+              }}
+            />
+          </Form.Item>
+        )
       ) : (
         children
       )}
@@ -43,6 +67,7 @@ const EditableTable = () => {
 
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
+  const [addKey, setAddKey] = useState(false);
 
   const isEditing = (record) => record.id === editingKey;
 
@@ -58,7 +83,7 @@ const EditableTable = () => {
     setEditingKey(record.id);
   };
 
-  const cancel = () => {
+  const handleCancel = () => {
     setEditingKey("");
   };
 
@@ -70,10 +95,25 @@ const EditableTable = () => {
   };
 
   const handleAdd = () => {
-    //  TODO:
+    setAddKey((prev) => {
+      return !prev;
+    });
+  };
+  const handleSubmit = async (newEntry) => {
+    const returnedData = await createOne(newEntry);
+    const newData = [...data];
+    returnedData.date = await dateFormat(returnedData.date);
+    newData.unshift(returnedData);
+    setEditingKey("");
+    setData(newData);
+    setTimeout(() => {
+      setAddKey((prev) => {
+        return !prev;
+      });
+    }, 500);
   };
 
-  const save = async (id) => {
+  const handleSave = async (id) => {
     try {
       const row = await form.validateFields();
       const newData = [...data];
@@ -99,7 +139,7 @@ const EditableTable = () => {
     {
       title: "Date",
       dataIndex: "date",
-      width: "17%",
+      width: "16%",
       editable: true,
       sorter: {
         compare: (a, b) => a.date > b.date,
@@ -109,7 +149,7 @@ const EditableTable = () => {
     {
       title: "Hours",
       dataIndex: "hours",
-      width: "17%",
+      width: "12%",
       editable: true,
       sorter: {
         compare: (a, b) => a.hours > b.hours,
@@ -119,7 +159,7 @@ const EditableTable = () => {
     {
       title: "Consumition",
       dataIndex: "consumition",
-      width: "17%",
+      width: "12%",
       editable: true,
       sorter: {
         compare: (a, b) => a.consumition > b.consumition,
@@ -129,7 +169,7 @@ const EditableTable = () => {
     {
       title: "Price",
       dataIndex: "price",
-      width: "17%",
+      width: "12%",
       editable: true,
       sorter: {
         compare: (a, b) => a.price > b.price,
@@ -139,7 +179,7 @@ const EditableTable = () => {
     {
       title: "Cost",
       dataIndex: "cost",
-      width: "17%",
+      width: "18%",
       editable: true,
       sorter: {
         compare: (a, b) => a.cost > b.cost,
@@ -149,21 +189,40 @@ const EditableTable = () => {
     {
       title: "Operation",
       dataIndex: "operation",
+      width: "15%",
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
-            <Button type="primary" onClick={() => save(record.id)}>
-              Save
-            </Button>
+            <Button
+              type="primary"
+              onClick={() => handleSave(record.id)}
+              shape="circle"
+              icon={<SaveOutlined />}
+              style={{
+                backgroundColor: green[6],
+                borderColor: green[6],
+                color: "#FFF",
+                marginRight: 5,
+              }}
+            ></Button>
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => handleDelete(record.id)}
             >
-              <Button type="danger">Delete</Button>
+              <Button
+                type="danger"
+                shape="circle"
+                icon={<DeleteOutlined />}
+                style={{ marginRight: 5 }}
+              ></Button>
             </Popconfirm>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <Button type="warning">Cancel</Button>
+            <Popconfirm title="Sure to cancel?" onConfirm={handleCancel}>
+              <Button
+                type="dashed"
+                shape="circle"
+                icon={<CloseOutlined />}
+              ></Button>
             </Popconfirm>
           </span>
         ) : (
@@ -172,7 +231,7 @@ const EditableTable = () => {
             disabled={editingKey !== ""}
             onClick={() => edit(record)}
           >
-            Edit
+            <EditOutlined /> Edit
           </Button>
         );
       },
@@ -188,7 +247,7 @@ const EditableTable = () => {
       ...col,
       onCell: (record) => ({
         record,
-        inputType: col.dataIndex === "date" ? "date" : "number",
+        inputType: col.dataIndex === "date" ? "datepicker" : "number",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -197,26 +256,39 @@ const EditableTable = () => {
   });
 
   return (
-    <Form form={form} component={false}>
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a new
-      </Button>
-      <Table
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        rowKey={(data) => data.id}
-        bordered
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
-      />
-    </Form>
+    <div style={{ width: "100%" }}>
+      {addKey ? (
+        <div style={{ display: "flex", marginTop: 16, marginBottom: 16 }}>
+          <FormAddKey handleSubmit={handleSubmit} handleAdd={handleAdd} />
+        </div>
+      ) : (
+        <Button
+          onClick={handleAdd}
+          type="primary"
+          style={{ marginBottom: 16, marginTop: 16 }}
+        >
+          Add a new
+        </Button>
+      )}
+
+      <Form form={form} component={false}>
+        <Table
+          components={{
+            body: {
+              cell: EditableCell,
+            },
+          }}
+          rowKey={(data) => data.id}
+          bordered
+          dataSource={data}
+          columns={mergedColumns}
+          rowClassName="editable-row"
+          pagination={{
+            onChange: handleCancel,
+          }}
+        />
+      </Form>
+    </div>
   );
 };
 

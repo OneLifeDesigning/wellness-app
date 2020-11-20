@@ -5,6 +5,7 @@ import { getAll } from "./apiclient";
 import useFetchWithLoading from "./hooks/useFetchWithLoading";
 import { useDataContext } from "./context/DataContext";
 import Spinner from "./components/layout/Spinner";
+import { Content } from "antd/lib/layout/layout";
 
 function App() {
   const { data, loading } = useFetchWithLoading(getAll);
@@ -12,21 +13,24 @@ function App() {
 
   useEffect(() => {
     data && setData(data);
-    data && localStorage.setItem("data", JSON.stringify(data));
     return () => {};
   }, [data, setData]);
 
   return (
     <div className="App">
-      <div className="site-layout-content">
-        {loading ? (
-          <div className="space-align-block">
-            <Spinner align="center" />
-          </div>
-        ) : (
-          <EditableTable data={data} />
-        )}
-      </div>
+      <Content
+        style={{
+          backgroundColor: "#f4f3ef",
+          padding: "50px",
+          width: "100vw",
+          minHeight: "100vh",
+          display: "flex",
+          alignContent: "stretch",
+          alignItems: "center",
+        }}
+      >
+        {loading ? <Spinner /> : <EditableTable data={data} />}
+      </Content>
     </div>
   );
 }
