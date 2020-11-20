@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import EditableTable from "./components/EditableTable";
+import { getAll } from "./apiclient";
+
+import useFetchWithLoading from "./hooks/useFetchWithLoading";
+import { useDataContext } from "./context/DataContext";
+import Spinner from "./components/layout/Spinner";
 
 function App() {
+  const { data, loading } = useFetchWithLoading(getAll);
+  const { setData } = useDataContext();
+
+  useEffect(() => {
+    data && setData(data);
+    data && localStorage.setItem("data", JSON.stringify(data));
+    return () => {};
+  }, [data, setData]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="site-layout-content">
+        {loading ? (
+          <div className="space-align-block">
+            <Spinner align="center" />
+          </div>
+        ) : (
+          <EditableTable data={data} />
+        )}
+      </div>
     </div>
   );
 }
