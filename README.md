@@ -1,4 +1,4 @@
-# Wellness TechGroup - Prueba de SPA
+# Wellness TechGroup - SPA
 
 Para iniciar el repositorio:
 
