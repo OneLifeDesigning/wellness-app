@@ -8,5 +8,5 @@ export const dateFormat = (date) => {
       ? `0${convert?.getMonth() + 1}`
       : convert?.getMonth() + 1;
   const year = convert?.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${day}/${month}/${year}`;
 };

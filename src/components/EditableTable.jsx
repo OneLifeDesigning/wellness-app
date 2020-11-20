@@ -3,7 +3,7 @@ import { Table, Input, InputNumber, Popconfirm, Form, Button } from "antd";
 import { useDataContext } from "../context/DataContext";
 import { patchOne, deleteOne, createOne } from "../apiclient";
 import FormAddKey from "./FormAddKey";
-import { dateFormat } from "../utils/helpers";
+import moment from "moment";
 import {
   CloseOutlined,
   EditOutlined,
@@ -102,7 +102,7 @@ const EditableTable = () => {
   const handleSubmit = async (newEntry) => {
     const returnedData = await createOne(newEntry);
     const newData = [...data];
-    returnedData.date = await dateFormat(returnedData.date);
+    returnedData.date = await moment(returnedData.date).format("L");
     newData.unshift(returnedData);
     setEditingKey("");
     setData(newData);
@@ -141,54 +141,55 @@ const EditableTable = () => {
       dataIndex: "date",
       width: "16%",
       editable: true,
+      key: "date",
       sorter: {
-        compare: (a, b) => a.date > b.date,
-        multiple: 1,
+        compare: (a, b) => new Date(a.date) - new Date(b.date),
       },
     },
     {
       title: "Hours",
       dataIndex: "hours",
+      key: "hours",
       width: "12%",
       editable: true,
       sorter: {
-        compare: (a, b) => a.hours > b.hours,
-        multiple: 2,
+        compare: (a, b) => Number(a.hours) - Number(b.hours),
       },
     },
     {
       title: "Consumition",
       dataIndex: "consumition",
+      key: "consumition",
       width: "12%",
       editable: true,
       sorter: {
-        compare: (a, b) => a.consumition > b.consumition,
-        multiple: 3,
+        compare: (a, b) => Number(a.consumition) - Number(b.consumition),
       },
     },
     {
       title: "Price",
       dataIndex: "price",
+      key: "price",
       width: "12%",
       editable: true,
       sorter: {
-        compare: (a, b) => a.price > b.price,
-        multiple: 4,
+        compare: (a, b) => Number(a.price) - Number(b.price),
       },
     },
     {
       title: "Cost",
       dataIndex: "cost",
+      key: "cost",
       width: "18%",
       editable: true,
       sorter: {
-        compare: (a, b) => a.cost > b.cost,
-        multiple: 5,
+        compare: (a, b) => Number(a.cost) - Number(b.cost),
       },
     },
     {
       title: "Operation",
       dataIndex: "operation",
+      key: "operation",
       width: "15%",
       render: (_, record) => {
         const editable = isEditing(record);
@@ -247,7 +248,7 @@ const EditableTable = () => {
       ...col,
       onCell: (record) => ({
         record,
-        inputType: col.dataIndex === "date" ? "datepicker" : "number",
+        inputType: col.dataIndex === "date" ? "date" : "number",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
