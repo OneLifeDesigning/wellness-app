@@ -33,12 +33,7 @@ const EditableCell = ({
               margin: 0,
             }}
           >
-            <InputNumber
-              min={0}
-              style={{
-                width: "100%",
-              }}
-            />
+            <InputNumber min={0} />
           </Form.Item>
         ) : (
           <Form.Item
@@ -48,11 +43,7 @@ const EditableCell = ({
             }}
             type="date"
           >
-            <Input
-              style={{
-                width: "100%",
-              }}
-            />
+            <Input />
           </Form.Item>
         )
       ) : (
@@ -139,9 +130,10 @@ const EditableTable = () => {
     {
       title: "Date",
       dataIndex: "date",
-      width: "16%",
+      width: "100px",
       editable: true,
       key: "date",
+      fixed: "left",
       sorter: {
         compare: (a, b) => new Date(a.date) - new Date(b.date),
       },
@@ -149,8 +141,9 @@ const EditableTable = () => {
     {
       title: "Hours",
       dataIndex: "hours",
+      align: "center",
       key: "hours",
-      width: "12%",
+      width: "70px",
       editable: true,
       sorter: {
         compare: (a, b) => Number(a.hours) - Number(b.hours),
@@ -160,7 +153,8 @@ const EditableTable = () => {
       title: "Consumition",
       dataIndex: "consumition",
       key: "consumition",
-      width: "12%",
+      align: "center",
+      width: "100px",
       editable: true,
       sorter: {
         compare: (a, b) => Number(a.consumition) - Number(b.consumition),
@@ -170,7 +164,7 @@ const EditableTable = () => {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      width: "12%",
+      width: "200px",
       editable: true,
       sorter: {
         compare: (a, b) => Number(a.price) - Number(b.price),
@@ -180,17 +174,19 @@ const EditableTable = () => {
       title: "Cost",
       dataIndex: "cost",
       key: "cost",
-      width: "18%",
+      width: "200px",
       editable: true,
       sorter: {
         compare: (a, b) => Number(a.cost) - Number(b.cost),
       },
     },
     {
-      title: "Operation",
-      dataIndex: "operation",
-      key: "operation",
-      width: "15%",
+      title: "Action",
+      dataIndex: "action",
+      align: "center",
+      key: "action",
+      width: "100px",
+      fixed: "right",
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
@@ -257,7 +253,7 @@ const EditableTable = () => {
   });
 
   return (
-    <div style={{ width: "100%" }}>
+    <div>
       {addKey ? (
         <div style={{ display: "flex", marginTop: 16, marginBottom: 16 }}>
           <FormAddKey handleSubmit={handleSubmit} handleAdd={handleAdd} />
@@ -287,6 +283,7 @@ const EditableTable = () => {
           pagination={{
             onChange: handleCancel,
           }}
+          scroll={{ x: 1024 }}
         />
       </Form>
     </div>

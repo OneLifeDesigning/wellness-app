@@ -16,7 +16,7 @@ const FormAddKey = (props) => {
   const [error, setError] = useState(false);
   const [form] = Form.useForm();
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       {error && (
         <Alert
           style={{ marginBottom: 5 }}
@@ -29,7 +29,6 @@ const FormAddKey = (props) => {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          width: "100%",
           backgroundColor: "#eaeaea",
           margin: 0,
           padding: 10,
@@ -54,12 +53,13 @@ const FormAddKey = (props) => {
           name={"date"}
           style={{
             marginBottom: 0,
+            marginRight: 5,
           }}
         >
           <Input
             placeholder="Date"
             style={{
-              width: "95%",
+              marginRight: 10,
             }}
           />
         </Form.Item>
@@ -67,12 +67,12 @@ const FormAddKey = (props) => {
           name={"hours"}
           style={{
             marginBottom: 0,
+            marginRight: 5,
           }}
         >
           <InputNumber
             placeholder="Hours"
             style={{
-              width: "95%",
               marginBottom: 0,
             }}
           />
@@ -83,38 +83,25 @@ const FormAddKey = (props) => {
             marginBottom: 0,
           }}
         >
-          <InputNumber
-            placeholder="Consumition"
-            style={{
-              width: "95%",
-            }}
-          />
+          <InputNumber placeholder="Consumition" />
         </Form.Item>
         <Form.Item
           name={"price"}
           style={{
+            marginRight: 5,
             marginBottom: 0,
           }}
         >
-          <InputNumber
-            placeholder="Price"
-            style={{
-              width: "95%",
-            }}
-          />
+          <InputNumber placeholder="Price" />
         </Form.Item>
         <Form.Item
           name={"cost"}
           style={{
+            marginRight: 5,
             marginBottom: 0,
           }}
         >
-          <InputNumber
-            placeholder="Cost"
-            style={{
-              width: "95%",
-            }}
-          />
+          <InputNumber placeholder="Cost" />
         </Form.Item>
         <Form.Item
           style={{

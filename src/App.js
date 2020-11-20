@@ -17,21 +17,7 @@ function App() {
   }, [data, setData]);
 
   return (
-    <div className="App">
-      <Content
-        style={{
-          backgroundColor: "#f4f3ef",
-          padding: "50px",
-          width: "100vw",
-          minHeight: "100vh",
-          display: "flex",
-          alignContent: "stretch",
-          alignItems: "center",
-        }}
-      >
-        {loading ? <Spinner /> : <EditableTable data={data} />}
-      </Content>
-    </div>
+    <Content>{loading ? <Spinner /> : <EditableTable data={data} />}</Content>
   );
 }
 
