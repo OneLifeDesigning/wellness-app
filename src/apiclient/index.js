@@ -19,4 +19,5 @@ http.interceptors.response.use(
 );
 
 export const getAll = () => http.get("/data");
-export const patch = (id, body) => http.patch(`/data/${id}`, body);
+export const patchOne = (id, body) => http.patch(`/data/${id}`, body);
+export const deleteOne = (id) => http.delete(`/data/${id}`);

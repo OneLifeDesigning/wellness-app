@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from "antd";
 import { useDataContext } from "../context/DataContext";
-import { patch } from "../apiclient";
+import { patchOne, deleteOne } from "../apiclient";
 
 const EditableCell = ({
   editing,
@@ -62,6 +62,17 @@ const EditableTable = () => {
     setEditingKey("");
   };
 
+  const handleDelete = (id) => {
+    const newData = data.filter((item) => id !== item.id);
+    setData(newData);
+    deleteOne(id);
+    setEditingKey("");
+  };
+
+  const handleAdd = () => {
+    //  TODO:
+  };
+
   const save = async (id) => {
     try {
       const row = await form.validateFields();
@@ -78,7 +89,7 @@ const EditableTable = () => {
         setData(newData);
         setEditingKey("");
       }
-      patch(id, row);
+      patchOne(id, row);
     } catch (errInfo) {
       console.log("Validate Failed:", errInfo);
     }
@@ -142,23 +153,31 @@ const EditableTable = () => {
         const editable = isEditing(record);
         return editable ? (
           <span>
-            <span onClick={() => save(record.id)}>Save</span>
+            <Button type="primary" onClick={() => save(record.id)}>
+              Save
+            </Button>
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => handleDelete(record.id)}
+            >
+              <Button type="danger">Delete</Button>
+            </Popconfirm>
             <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <span>Cancel</span>
+              <Button type="warning">Cancel</Button>
             </Popconfirm>
           </span>
         ) : (
-          <span disabled={editingKey !== ""} onClick={() => edit(record)}>
+          <Button
+            type="primary"
+            disabled={editingKey !== ""}
+            onClick={() => edit(record)}
+          >
             Edit
-          </span>
+          </Button>
         );
       },
     },
   ];
-
-  const handleAdd = () => {
-    //  TODO:
-  };
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -180,7 +199,7 @@ const EditableTable = () => {
   return (
     <Form form={form} component={false}>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a row
+        Add a new
       </Button>
       <Table
         components={{
