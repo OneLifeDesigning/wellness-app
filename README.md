@@ -8,7 +8,7 @@ Demo de SPA ReactJS que consume los datos de API externa [Ver Repo](https://gith
 _Frontend Angular / React / Vue.JS: encargado de consumir la API anterior y presentar los datos en una tabla, y realizar las operaciones CRUD desde la misma_
 
 > **Solución**
-> Creo un Proveedor de Contexto (DataContextProvider) en Index.js que da acceso a los datos en cualquier parte de la APP. Para la carga de datos uso un _hook_ (useFetchWithLoading) que nos conecta con el servicio de _API Rest_ mediante _axios_ para las peticiones HTTP. Se las pasamos al componente EditableTable mediante props, el cual se encarga de procesarlos y operar con ellos.
+> Creo un Proveedor de Contexto (DataContextProvider) en Index.js que da acceso a los datos en cualquier parte de la APP. Para la carga de datos uso un _hook_ (useFetchWithLoading) que nos conecta con el servicio de _API Rest_ mediante _axios_ para las peticiones HTTP. Se las pasamos al componente EditableTable mediante context, el cual se encarga de procesarlos y operar con ellos.
 
 ---
 
