@@ -16,7 +16,7 @@ _Frontend Angular / React / Vue.JS: encargado de consumir la API anterior y pres
 _Uso de alguna librería de representación gráficaFrontend Angular / React / Vue.JS: encargado de consumir la API anterior y presentar los datos en una tabla, y realizar las operaciones CRUD desde la misma_
 
 > **Solución**
-> Importo la libreria ApexCharts para representar los datos y creo unas funciones que los procesan para poder renderizarlos en los gráficos. Primer gráfico representa la suma de coste diario de todos los registros. Segundo gráfico representa la suma total de costes de cada mes.
+> Importo la librería ApexCharts para representar los datos y creo las funciones necesarias para procesar los datos y poder renderizarlos en los gráficos. **Primer gráfico** representa la suma del coste por día. **Segundo gráfico** representa la suma total de costes por cada mes.
 
 ---
 
