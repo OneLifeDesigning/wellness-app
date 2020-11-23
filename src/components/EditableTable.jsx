@@ -3,7 +3,7 @@ import { Table, Input, InputNumber, Popconfirm, Form, Button } from "antd";
 import { useDataContext } from "../context/DataContext";
 import { patchOne, deleteOne, createOne } from "../apiclient";
 import FormAddKey from "./FormAddKey";
-import moment from "moment";
+import { dateFormat } from "../utils/helpers";
 import {
   CloseOutlined,
   EditOutlined,
@@ -93,7 +93,7 @@ const EditableTable = () => {
   const handleSubmit = async (newEntry) => {
     const returnedData = await createOne(newEntry);
     const newData = [...data];
-    returnedData.date = await moment(returnedData.date).format("L");
+    returnedData.date = await dateFormat(returnedData.date);
     newData.unshift(returnedData);
     setEditingKey("");
     setData(newData);

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import moment from "moment";
+import { dateFormat } from "../utils/helpers";
+
 const useFetchWithLoading = (fetchFn, params) => {
   const [state, setState] = useState({
     loading: true,
@@ -10,7 +11,10 @@ const useFetchWithLoading = (fetchFn, params) => {
   useEffect(() => {
     fetchFn(params)
       .then(async (data) => {
-        await data?.map((item) => (item.date = moment(item.date).format("L")));
+        data?.map(async (item) => {
+          item.date = await dateFormat(item?.date);
+          return item;
+        });
         setState({
           loading: false,
           data,
