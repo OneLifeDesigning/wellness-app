@@ -12,6 +12,14 @@ _Frontend Angular / React / Vue.JS: encargado de consumir la API anterior y pres
 
 ---
 
+**_Bonus_**
+_Uso de alguna librería de representación gráficaFrontend Angular / React / Vue.JS: encargado de consumir la API anterior y presentar los datos en una tabla, y realizar las operaciones CRUD desde la misma_
+
+> **Solución**
+> Importo la libreria ApexCharts para representar los datos y creo unas funciones que los procesan para poder renderizarlos en los gráficos. Primer gráfico representa la suma de coste diario de todos los registros. Segundo gráfico representa la suma total de costes de cada mes.
+
+---
+
 Iniciar repositorio:
 
 `git clone git@github.com:OneLifeDesigning/wellness-app.git`
