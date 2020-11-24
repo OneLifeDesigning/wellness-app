@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { dateFormat } from "../utils/helpers";
+import { dateFormat } from "../helpers/utils";
 
 const useFetchWithLoading = (fetchFn, params) => {
   const [state, setState] = useState({
